@@ -43,10 +43,9 @@
           </a>
         </footer>
     </article>
-
     <lightning-card title='Attachment (3)' icon-name="custom:custom14" class="fl-card">
         <lightning-button-menu alternative-text="Show menu" slot="actions">
-                <lightning-menu-item value="AddFile" label="Add File" onclick={handleOpenModal}></lightning-menu-item>
+            <lightning-menu-item value="AddFile" label="Add File" onclick={handleOpenModal}></lightning-menu-item>
         </lightning-button-menu>        
         <ul class="slds-m-around_medium">
             <template for:each={contacts} for:item="contact">
@@ -60,7 +59,8 @@
                 </li>
             </template>
         </ul>              
-        <p>{recordId}</p>    
+        <p>{recordId}</p> 
+        <p></p>   
     </lightning-card> 
     <template if:true={isOpenModal}>
         <div style="height: 500px;">
