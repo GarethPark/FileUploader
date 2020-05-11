@@ -1,0 +1,14 @@
+
+<template>
+    <lightning-card title="Attachments (2)" icon-name="custom:custom14">
+        This is a test form to enter in document details 
+    </lightning-card>   
+    <lightning-file-upload
+            label="Attach receipt"
+            name="fileUploader"
+            accept={acceptedFormats}
+            record-id={myRecordId}
+            onuploadfinished={handleUploadFinished}
+            multiple>
+    </lightning-file-upload>
+</template>
