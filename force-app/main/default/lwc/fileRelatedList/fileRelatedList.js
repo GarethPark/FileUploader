@@ -1,6 +1,7 @@
 import { LightningElement, api, track} from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 
-export default class Fileuploader extends LightningElement {
+export default class Fileuploader extends NavigationMixin(LightningElement) {
     @api recordId;
     @track isOpenModal = false;
 
@@ -38,5 +39,32 @@ export default class Fileuploader extends LightningElement {
    
     handleCloseModal() {
         this.isOpenModal = false;
+    }
+    //AttachedContentDocuments //OpportunityContactRoles
+    navigateToContactRoleRelatedList() {
+        // Navigate to the CaseComments related list page
+        // for a specific Case record.
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordRelationshipPage',
+            attributes: {
+                recordId: '0068E00000P7mEfQAJ',
+                objectApiName: 'Opportunity',
+                relationshipApiName: 'OpportunityContactRoles',
+                actionName: 'view'
+            }
+        });
+    }
+    navigateToFileRelatedList() {
+        // Navigate to the CaseComments related list page
+        // for a specific Case record.
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordRelationshipPage',
+            attributes: {
+                recordId: '0068E00000P7mEfQAJ',
+                objectApiName: 'Opportunity',
+                relationshipApiName: 'AttachedContentDocuments',
+                actionName: 'view'
+            }
+        });
     }
 }
