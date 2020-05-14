@@ -1,9 +1,12 @@
 import { LightningElement, api, track} from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
+import uploadFiles from '@salesforce/apex/FileUploadService.uploadFiles';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class Fileuploader extends NavigationMixin(LightningElement) {
     @api recordId;
     @track isOpenModal = false;
+    @track filesUploaded = [];
 
     contacts = [
         {
@@ -22,16 +25,16 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
             Title: 'CEO'
         }
     ];
-
+    //TO DO : Expand
     get acceptedFormats() {
         return ['.pdf', '.png'];
     }
 
-    handleUploadFinished(event) {
+    /*handleUploadFinished(event) {
         // Get the list of uploaded files
         const uploadedFiles = event.detail.files;
         alert("No. of files uploaded : " + uploadedFiles.length);
-    }
+    }*/
 
     handleOpenModal() {
         this.isOpenModal = true;
@@ -40,23 +43,8 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     handleCloseModal() {
         this.isOpenModal = false;
     }
-    //AttachedContentDocuments //OpportunityContactRoles
-    navigateToContactRoleRelatedList() {
-        // Navigate to the CaseComments related list page
-        // for a specific Case record.
-        this[NavigationMixin.Navigate]({
-            type: 'standard__recordRelationshipPage',
-            attributes: {
-                recordId: '0068E00000P7mEfQAJ',
-                objectApiName: 'Opportunity',
-                relationshipApiName: 'OpportunityContactRoles',
-                actionName: 'view'
-            }
-        });
-    }
+    //TODO : Remove hardcoded ID
     navigateToFileRelatedList() {
-        // Navigate to the CaseComments related list page
-        // for a specific Case record.
         this[NavigationMixin.Navigate]({
             type: 'standard__recordRelationshipPage',
             attributes: {
@@ -66,5 +54,43 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
                 actionName: 'view'
             }
         });
+    }
+    handleFileUploaded(event) {
+        if (event.target.files.length > 0) {
+            let files = [];
+            for(var i=0; i< event.target.files.length; i++){
+                let file = event.target.files[i];
+                let reader = new FileReader();
+                reader.onload = e => {
+                    let base64 = 'base64,';
+                    let content = reader.result.indexOf(base64) + base64.length;
+                    let fileContents = reader.result.substring(content);
+                    this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+    attachFiles(event){
+        uploadFiles({files: this.filesUploaded})
+            .then(result => {
+                if(result == true) {
+                    this.showToastMessage('Success','Files uploaded', 'success');
+                }else{
+                    this.showToastMessage('Error','Error uploading files', 'error');
+                }
+            })
+            .catch(error => {
+                this.showToastMessage('Error','Error uploading files', 'error');
+            });
+    }
+    showToastMessage(title,message,variant){
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                message: message,
+                variant: variant
+            })
+        );
     }
 }

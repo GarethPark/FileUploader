@@ -17,7 +17,7 @@
                 </a>
               </h2>
             </div>
-            <lightning-button-menu alternative-text="Show menu" slot="actions">
+            <lightning-button-menu alternative-text="Show menu" slot="actions" variant="border-filled">
                 <lightning-menu-item value="AddFile" label="Add File" onclick={handleOpenModal}></lightning-menu-item>
             </lightning-button-menu> 
           </header>
@@ -42,26 +42,7 @@
             <span class="slds-assistive-text">Accounts</span>
           </a>
         </footer>
-    </article>
-    <lightning-card title='Attachment (3)' icon-name="custom:custom14" class="fl-card">
-        <lightning-button-menu alternative-text="Show menu" slot="actions">
-            <lightning-menu-item value="AddFile" label="Add File" onclick={handleOpenModal}></lightning-menu-item>
-        </lightning-button-menu>        
-        <ul class="slds-m-around_medium">
-            <template for:each={contacts} for:item="contact">
-                <li key={contact.Id}>
-                    <div class="slds-p-around lgc-bg">
-                        <lightning-tile label="Lightning component team" type="media" href="www.salesforce.com"> 
-                            <lightning-icon icon-name="doctype:xml" alternative-text="XML file" title="XML" slot="media" ></lightning-icon>                            
-                            <p class="slds-truncate" title="7 Members">{contact.Name} - {contact.Title}</p>
-                        </lightning-tile>
-                    </div>                    
-                </li>
-            </template>
-        </ul>              
-        <p>{recordId}</p> 
-        <p></p>   
-    </lightning-card> 
+    </article> 
     <template if:true={isOpenModal}>
         <div style="height: 500px;">
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
@@ -78,11 +59,11 @@
                         <div class="slds-text-heading_small slds-text-align_center">
                             Enter a file to upload
                             <lightning-file-upload
-                                label="Attach receipt"
+                                label="Upload File"
                                 name="fileUploader"
                                 accept={acceptedFormats}
                                 record-id={myRecordId}
-                                onuploadfinished={handleUploadFinished}
+                                onuploadfinished={handleFileUploaded}
                                 multiple>
                             </lightning-file-upload>
                         </div>
