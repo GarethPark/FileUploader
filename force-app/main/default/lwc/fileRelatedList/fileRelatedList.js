@@ -7,6 +7,7 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     @api recordId;
     @track isOpenModal = false;
     @track filesUploaded = [];
+    @track uploadDisabledd =false;
 
     contacts = [
         {
@@ -56,10 +57,11 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         });
     }
     handleFileUploaded(event) {
-        if (event.target.files.length > 0) {
-            let files = [];
-            for(var i=0; i< event.target.files.length; i++){
-                let file = event.target.files[i];
+        if (event.detail.files > 0) {
+            this.showToastMessage('Success','Files uploaded', 'success');
+            /*let files = [];
+            for(var i=0; i< event.detail.files; i++){
+                let file = event.detail.files[i];
                 let reader = new FileReader();
                 reader.onload = e => {
                     let base64 = 'base64,';
@@ -68,7 +70,7 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
                     this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
                 };
                 reader.readAsDataURL(file);
-            }
+            }*/
         }
     }
     attachFiles(event){
@@ -93,4 +95,8 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
             })
         );
     }
+    connectedCallback() 
+    {
+        this.disabledCondition = true;
+    } 
 }
