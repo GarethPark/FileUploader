@@ -31,12 +31,6 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         return ['.pdf', '.png'];
     }
 
-    /*handleUploadFinished(event) {
-        // Get the list of uploaded files
-        const uploadedFiles = event.detail.files;
-        alert("No. of files uploaded : " + uploadedFiles.length);
-    }*/
-
     handleOpenModal() {
         this.isOpenModal = true;
     }
@@ -57,11 +51,10 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         });
     }
     handleFileUploaded(event) {
-        if (event.detail.files > 0) {
-            this.showToastMessage('Success','Files uploaded', 'success');
-            /*let files = [];
-            for(var i=0; i< event.detail.files; i++){
-                let file = event.detail.files[i];
+        if (event.target.files.length > 0) {
+            let files = [];
+            for(var i=0; i< event.target.files.length; i++){
+                let file = event.target.files[i];
                 let reader = new FileReader();
                 reader.onload = e => {
                     let base64 = 'base64,';
@@ -70,7 +63,7 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
                     this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
                 };
                 reader.readAsDataURL(file);
-            }*/
+            }
         }
     }
     attachFiles(event){
@@ -99,4 +92,10 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     {
         this.disabledCondition = true;
     } 
+    handleSubmit(event){
+        event.preventDefault();       // stop the form from submitting
+        const fields = event.detail.fields;
+        fields.PathOnClient = this.filesUploaded[0].PathOnClient;
+        this.template.querySelector('lightning-record-edit-form').submit(fields);
+     }
 }
