@@ -93,9 +93,16 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         this.disabledCondition = true;
     } 
     handleSubmit(event){
-        event.preventDefault();       // stop the form from submitting
+        debugger;
+        event.preventDefault();      
         const fields = event.detail.fields;
         fields.PathOnClient = this.filesUploaded[0].PathOnClient;
+        fields.VersionData =  this.filesUploaded[0].VersionData;
+        fields.Title = this.filesUploaded[0].Title;
         this.template.querySelector('lightning-record-edit-form').submit(fields);
      }
+     handleSuccess(event) {
+        const recordId = event.detail.id;
+        console.log('onsuccess: ', recordId);
+    }
 }
