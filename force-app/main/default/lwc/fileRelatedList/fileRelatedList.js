@@ -8,6 +8,9 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     @track isOpenModal = false;
     @track filesUploaded = [];
     @track uploadDisabledd =false;
+    @track fileName = '';
+    @track fileUploaded;
+    //check all tracks needed?
 
     contacts = [
         {
@@ -26,7 +29,7 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
             Title: 'CEO'
         }
     ];
-    //TO DO : Expand
+    //TO DO : Expand * Check ContentVerion trigger in DBCore
     get acceptedFormats() {
         return ['.pdf', '.png'];
     }
@@ -53,20 +56,21 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     handleFileUploaded(event) {
         if (event.target.files.length > 0) {
             let files = [];
-            for(var i=0; i< event.target.files.length; i++){
-                let file = event.target.files[i];
-                let reader = new FileReader();
-                reader.onload = e => {
-                    let base64 = 'base64,';
-                    let content = reader.result.indexOf(base64) + base64.length;
-                    let fileContents = reader.result.substring(content);
-                    this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
-                };
-                reader.readAsDataURL(file);
-            }
+            
+            let file = event.target.files[event.target.files.length-1];
+            let reader = new FileReader();
+            reader.onload = e => {
+                let base64 = 'base64,';
+                let content = reader.result.indexOf(base64) + base64.length;
+                let fileContents = reader.result.substring(content);
+                this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
+                this.fileUploaded = {PathOnClient: file.name, Title: file.name, VersionData: fileContents};
+            };
+            reader.readAsDataURL(file);
+            
         }
     }
-    attachFiles(event){
+    /*attachFiles(event){
         uploadFiles({files: this.filesUploaded})
             .then(result => {
                 if(result == true) {
@@ -78,7 +82,7 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
             .catch(error => {
                 this.showToastMessage('Error','Error uploading files', 'error');
             });
-    }
+    }*/
     showToastMessage(title,message,variant){
         this.dispatchEvent(
             new ShowToastEvent({
@@ -92,17 +96,19 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     {
         this.disabledCondition = true;
     } 
-    handleSubmit(event){
-        debugger;
+    handleSubmit(event)
+    {
         event.preventDefault();      
         const fields = event.detail.fields;
-        fields.PathOnClient = this.filesUploaded[0].PathOnClient;
-        fields.VersionData =  this.filesUploaded[0].VersionData;
-        fields.Title = this.filesUploaded[0].Title;
+        fields.PathOnClient = this.fileUploaded.PathOnClient;
+        fields.VersionData =  this.fileUploaded.VersionData;
+        fields.Title = this.fileUploaded.Title;
         this.template.querySelector('lightning-record-edit-form').submit(fields);
      }
-     handleSuccess(event) {
+    handleSuccess(event) 
+    {
         const recordId = event.detail.id;
+        this.showToastMessage('Success','Files uploaded', 'success');
         console.log('onsuccess: ', recordId);
     }
 }
