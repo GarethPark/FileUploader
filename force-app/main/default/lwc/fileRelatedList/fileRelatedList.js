@@ -6,10 +6,10 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class Fileuploader extends NavigationMixin(LightningElement) {
     @api recordId;
     @track isOpenModal = false;
-    @track filesUploaded = [];
     @track uploadDisabledd =false;
     @track fileName = '';
     @track fileUploaded;
+    @track contentVersionId;
     //check all tracks needed?
 
     contacts = [
@@ -57,17 +57,16 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         if (event.target.files.length > 0) {
             let files = [];
             
-            let file = event.target.files[event.target.files.length-1];
+            let file = event.target.files[event.target.files.length -1];
             let reader = new FileReader();
             reader.onload = e => {
                 let base64 = 'base64,';
                 let content = reader.result.indexOf(base64) + base64.length;
                 let fileContents = reader.result.substring(content);
-                this.filesUploaded.push({PathOnClient: file.name, Title: file.name, VersionData: fileContents});
                 this.fileUploaded = {PathOnClient: file.name, Title: file.name, VersionData: fileContents};
+                this.fileName = file.name;
             };
-            reader.readAsDataURL(file);
-            
+            reader.readAsDataURL(file); 
         }
     }
     /*attachFiles(event){
@@ -103,12 +102,13 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
         fields.PathOnClient = this.fileUploaded.PathOnClient;
         fields.VersionData =  this.fileUploaded.VersionData;
         fields.Title = this.fileUploaded.Title;
+        fields.IsMajorVersion = false;
         this.template.querySelector('lightning-record-edit-form').submit(fields);
      }
     handleSuccess(event) 
     {
-        const recordId = event.detail.id;
+        this.contentVersionId = event.detail.id;
         this.showToastMessage('Success','Files uploaded', 'success');
-        console.log('onsuccess: ', recordId);
+        console.log('onsuccess: ', this.contentVersionId);
     }
 }
