@@ -15,18 +15,21 @@ export default class Fileuploader extends NavigationMixin(LightningElement) {
     contacts = [
         {
             Id: '003171931112854375',
-            Name: 'Amy Taylor',
-            Title: 'VP of Engineering'
+            Title: 'Contract Agreement',
+            Name: '15 May 2020',
+            Size: '197KB'
         },
         {
             Id: '003192301009134555',
-            Name: 'Michael Jones',
-            Title: 'VP of Sales'
+            Title: 'Questionaire',
+            Name: '18 May 2020',
+            Size: '404KB'
         },
         {
             Id: '003848991274589432',
-            Name: 'Jennifer Wu',
-            Title: 'CEO'
+            Title: 'Terms and Conditions',
+            Name: '29 May 2020',
+            Size: '92KB'
         }
     ];
     //TO DO : Expand * Check ContentVerion trigger in DBCore

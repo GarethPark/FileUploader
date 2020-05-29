@@ -13,7 +13,7 @@
             <div class="slds-media__body">
               <h2 class="slds-card__header-title">
                 <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="Accounts">
-                  <span>Attachments (16)</span>
+                  <span>Attachments (3)</span>
                 </a>
               </h2>
             </div>
@@ -27,15 +27,15 @@
                 <template for:each={contacts} for:item="contact">
                     <li key={contact.Id}>
                         <div class="slds-p-around lgc-bg">
-                            <lightning-tile label="Lightning component team" type="media" href="www.salesforce.com"> 
+                            <lightning-tile label={contact.Title} type="media" href="www.salesforce.com"> 
                                 <lightning-icon icon-name="doctype:xml" alternative-text="XML file" title="XML" slot="media" ></lightning-icon>                            
-                                <p class="slds-truncate" title="7 Members">{contact.Name} - {contact.Title}</p>
+                                <p class="slds-truncate" title="7 Members">{contact.Name} - {contact.Size}</p>
                             </lightning-tile>
                         </div>                    
                     </li>
                 </template>
             </ul>              
-            <p>{recordId}</p>   
+            <!--<p>{recordId}</p>   -->
         </div>
         <footer class="slds-card__footer">
           <a class="slds-card__footer-action" href="javascript:void(0);" onclick={navigateToFileRelatedList}>View All
